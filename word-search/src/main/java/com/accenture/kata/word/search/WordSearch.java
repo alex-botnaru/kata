@@ -30,7 +30,7 @@ public class WordSearch {
 			}
 
 			if (word.matches(".*\\d.*")) {
-				throw new InvalidWordException("A word should contain numbers.");
+				throw new InvalidWordException("A word should not contain numbers.");
 			}
 
 			words.add(new Word(word));
@@ -39,6 +39,10 @@ public class WordSearch {
 		// Read the  grid
 		for(int i = 1; i < lines.size(); i++) {
 			String row = lines.get(i).replaceAll("[ ,]", "");
+			
+			if(row.matches(".*\\d.*")) {
+				throw new InvalidGridException("The Grid should not contain numbers.");
+			}
 			
 			if(gridSize == -1) {
 				gridSize = row.length();
