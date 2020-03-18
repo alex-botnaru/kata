@@ -15,20 +15,25 @@ import com.accenture.kata.word.search.WordSearch;
 import com.accenture.kata.word.search.exception.InvalidWordException;
 
 public class WordSearchTest {
-	
+
 	@Test
-	public void whenWordSearchLoadsAValidFileAndHasAllWords() throws URISyntaxException, IOException, InvalidWordException {
-		Path path = Paths.get(getClass().getClassLoader().getResource("word-search-input-valid-size5.txt").toURI());
-		WordSearch wordSearch = new WordSearch(path);
+	public void whenWordSearchLoadsAValidFileAndHasAllWords()
+			throws URISyntaxException, IOException, InvalidWordException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size5.txt"));
 		assertNotNull(wordSearch.getWords());
 		assertEquals(5, wordSearch.getWords().size());
 	}
-	
+
 	@Test
 	public void whenWordSearchLoadsAFileWithInvalidWordAndThrowsAnException() throws URISyntaxException {
-		Path path = Paths.get(getClass().getClassLoader().getResource("word-search-input-invalid-word.txt").toURI());
-		
-		assertThrows(InvalidWordException.class, () -> new WordSearch(path));
+
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-missing-words.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-no-words-list.txt")));
+	}
+
+	private Path getResourcePath(String fileName) throws URISyntaxException {
+		return Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
 	}
 
 }
