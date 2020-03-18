@@ -24,6 +24,10 @@ public class WordSearch {
 				throw new InvalidWordException("A word should be minimum two letters long.");
 			}
 
+			if (word.matches(".*\\d.*")) {
+				throw new InvalidWordException("A word should contain numbers.");
+			}
+
 			words.add(new Word(word));
 		}
 	}

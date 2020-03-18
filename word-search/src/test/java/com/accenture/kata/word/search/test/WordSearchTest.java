@@ -25,11 +25,16 @@ public class WordSearchTest {
 	}
 
 	@Test
-	public void whenWordSearchLoadsAFileWithInvalidWordAndThrowsAnException() throws URISyntaxException {
+	public void whenWordSearchLoadsAFileWithInvalidWordAndThrowsAnException() {
 
 		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word.txt")));
 		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-missing-words.txt")));
 		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-no-words-list.txt")));
+	}
+	
+	@Test
+	public void whenWordSearchLoadsAFileWithAWordCotainingNumberAndThrowsAnException() {
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-number.txt")));
 	}
 
 	private Path getResourcePath(String fileName) throws URISyntaxException {
