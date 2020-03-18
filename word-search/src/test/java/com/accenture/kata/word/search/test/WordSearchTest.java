@@ -42,6 +42,11 @@ public class WordSearchTest {
 	public void whenWordSearchLoadsAFileWithInvalidRowsInGridAndThrowsAnException() {
 		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-rows-number.txt")));
 	}
+	
+	@Test
+	public void whenWordSearchLoadsAFileWithInvalidColumnsInGridAndThrowsAnException() {
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-columns-number.txt")));
+	}
 
 	private Path getResourcePath(String fileName) throws URISyntaxException {
 		return Paths.get(getClass().getClassLoader().getResource(fileName).toURI());

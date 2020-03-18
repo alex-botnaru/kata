@@ -42,6 +42,8 @@ public class WordSearch {
 			
 			if(gridSize == -1) {
 				gridSize = row.length();
+			} else if (row.length() != gridSize) {
+				throw new InvalidGridException("The Grid has invalid number of columns");
 			}
 			rows.add(row);
 		}
