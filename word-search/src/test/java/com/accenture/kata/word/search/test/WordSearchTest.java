@@ -12,13 +12,14 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 import com.accenture.kata.word.search.WordSearch;
+import com.accenture.kata.word.search.exception.InvalidGridException;
 import com.accenture.kata.word.search.exception.InvalidWordException;
 
 public class WordSearchTest {
 
 	@Test
 	public void whenWordSearchLoadsAValidFileAndHasAllWords()
-			throws URISyntaxException, IOException, InvalidWordException {
+			throws URISyntaxException, IOException, InvalidWordException, InvalidGridException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size5.txt"));
 		assertNotNull(wordSearch.getWords());
 		assertEquals(5, wordSearch.getWords().size());
@@ -35,6 +36,11 @@ public class WordSearchTest {
 	@Test
 	public void whenWordSearchLoadsAFileWithAWordCotainingNumberAndThrowsAnException() {
 		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-number.txt")));
+	}
+	
+	@Test
+	public void whenWordSearchLoadsAFileWithInvalidRowsInGridAndThrowsAnException() {
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-rows-number.txt")));
 	}
 
 	private Path getResourcePath(String fileName) throws URISyntaxException {
