@@ -94,9 +94,11 @@ public class WordSearchTest {
 	@Test
 	public void whenSearchForWordsHorizontalyBackwardsAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		Set<Coordinates> expectedLocationWordSun = new HashSet<>(Arrays.asList(new Coordinates(2, 2), new Coordinates(1, 2), new Coordinates(0, 2)));
 		Set<Coordinates> expectedLocationWordBike = new HashSet<>(Arrays.asList(new Coordinates(3, 3), new Coordinates(2, 3), new Coordinates(1, 3), new Coordinates(0, 3)));
 		Set<Coordinates> expectedLocationWordLaptop= new HashSet<>(Arrays.asList(new Coordinates(5, 4), new Coordinates(4, 4), new Coordinates(3, 4),new Coordinates(2, 4), new Coordinates(1, 4), new Coordinates(0, 4)));
 		
+		searchForWordLocationTest(wordSearch, "SUN", expectedLocationWordSun);
 		searchForWordLocationTest(wordSearch, "BIKE", expectedLocationWordBike);
 		searchForWordLocationTest(wordSearch, "LAPTOP", expectedLocationWordLaptop);
 	}
