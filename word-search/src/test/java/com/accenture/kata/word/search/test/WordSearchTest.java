@@ -127,6 +127,19 @@ public class WordSearchTest {
 		searchForWordLocationTest(wordSearch, "TOSITA", expectedLocationWordTosita);
 	}
 	
+	@Test
+	public void whenSearchForWordsVerticallyDownUpAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		// The words below don't exist in the word list, but for sake of testing, search for group of letters vertically from down up
+		Set<Coordinates> expectedLocationWordPen = new HashSet<>(Arrays.asList(new Coordinates(0, 4), new Coordinates(0, 3), new Coordinates(0, 2)));
+		Set<Coordinates> expectedLocationWordOdre = new HashSet<>(Arrays.asList(new Coordinates(5, 3), new Coordinates(5, 2), new Coordinates(5, 1), new Coordinates(5, 0)));
+		Set<Coordinates> expectedLocationWordAtisot= new HashSet<>(Arrays.asList(new Coordinates(2, 5), new Coordinates(2, 4), new Coordinates(2, 3),new Coordinates(2, 2), new Coordinates(2, 1), new Coordinates(2, 0)));
+		
+		searchForWordLocationTest(wordSearch, "PEN", expectedLocationWordPen);
+		searchForWordLocationTest(wordSearch, "ODRE", expectedLocationWordOdre);
+		searchForWordLocationTest(wordSearch, "ATISOT", expectedLocationWordAtisot);
+	}
+	
 	
 	// vertically horizontally  
 	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation) throws WordNotFoundException {

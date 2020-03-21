@@ -123,6 +123,15 @@ public class WordSearch {
 				break;
 			}
 
+			// Search vertically down up
+			index = column.indexOf(new StringBuilder(word).reverse().toString()); // Reverse the word
+			if (index > -1) {
+				for (int y = word.length() - 1; y >= 0; y--) {
+					location.add(new Coordinates(x, y + index));
+				}
+				break;
+			}
+
 		}
 
 		if (location.isEmpty()) {
