@@ -6,6 +6,11 @@ public class Coordinates {
 	private int y;
 
 	public Coordinates(int x, int y) {
+
+		if (x < 0 || y < 0) {
+			throw new IllegalArgumentException("Coordinates values must by positive");
+		}
+
 		this.x = x;
 		this.y = y;
 	}

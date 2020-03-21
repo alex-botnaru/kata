@@ -1,5 +1,6 @@
 package com.accenture.kata.word.search.test;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -98,6 +99,17 @@ public class WordSearchTest {
 		
 		searchForWordLocationTest(wordSearch, "BIKE", expectedLocationWordBike);
 		searchForWordLocationTest(wordSearch, "LAPTOP", expectedLocationWordLaptop);
+	}
+	
+	@Test
+	public void whenCreatingCoordinatesObjectsWithPositiveAndNegativeValues() {
+		assertDoesNotThrow(() -> new Coordinates(0, 0));
+		assertDoesNotThrow(() -> new Coordinates(4, 0));
+		assertDoesNotThrow(() -> new Coordinates(0, 8));
+		assertDoesNotThrow(() -> new Coordinates(77, 22));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-1, 4));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(2, -10));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-3, -4));
 	}
 	
 	
