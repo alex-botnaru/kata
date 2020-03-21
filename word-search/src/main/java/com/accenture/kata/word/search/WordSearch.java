@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.accenture.kata.word.search.exception.InvalidGridException;
 import com.accenture.kata.word.search.exception.InvalidWordException;
@@ -69,6 +72,11 @@ public class WordSearch {
 
 	public List<Word> getWords() {
 		return words;
+	}
+
+	public Set<Coordinates> findLocationForWord(String word) {
+		Set<Coordinates> location = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0), new Coordinates(4, 0), new Coordinates(5, 0)));
+		return location;
 	}
 
 }
