@@ -33,39 +33,66 @@ public class WordSearchTest {
 	@Test
 	public void whenWordSearchLoadsAFileWithInvalidWordAndThrowsAnException() {
 
-		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word.txt")));
-		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-missing-words.txt")));
-		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-no-words-list.txt")));
+		assertThrows(InvalidWordException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-invalid-word.txt")));
+		assertThrows(InvalidWordException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-missing-words.txt")));
+		assertThrows(InvalidWordException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-no-words-list.txt")));
 	}
-	
+
 	@Test
 	public void whenWordSearchLoadsAFileWithAWordCotainingNumberAndThrowsAnException() {
-		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-number.txt")));
+		assertThrows(InvalidWordException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-number.txt")));
 	}
-	
+
 	@Test
 	public void whenWordSearchLoadsAFileWithInvalidRowsInGridAndThrowsAnException() {
-		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-rows-number.txt")));
+		assertThrows(InvalidGridException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-invalid-rows-number.txt")));
 	}
-	
+
 	@Test
 	public void whenWordSearchLoadsAFileWithInvalidColumnsInGridAndThrowsAnException() {
-		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-columns-number.txt")));
+		assertThrows(InvalidGridException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-invalid-columns-number.txt")));
 	}
-	
+
 	@Test
 	public void whenWordSearchLoadsAFileWithGridContainingNumbersAndThrowsAnException() {
-		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-numbers.txt")));
+		assertThrows(InvalidGridException.class,
+				() -> new WordSearch(getResourcePath("word-search-input-grid-with-numbers.txt")));
 	}
-	
+
 	@Test
-	public void whenSearchForHorizontalWordTreeAndReturnsLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
-		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size5.txt"));
-		Set<Coordinates> expectedLocation = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0), new Coordinates(4, 0), new Coordinates(5, 0)));
+	public void whenSearchForHorizontalWordTreeAndReturnsLocation()
+			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		Set<Coordinates> expectedLocation = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0),
+				new Coordinates(4, 0), new Coordinates(5, 0)));
 		Set<Coordinates> location = wordSearch.findLocationForWord("TREE");
 		assertEquals(expectedLocation.size(), location.size());
 		assertIterableEquals(expectedLocation, location);
-		
+	}
+
+	@Test
+	public void whenSearchForWordsHorizontalyForwardAndReturnTheirLocations()
+			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		Set<Coordinates> expectedLocationWordFlower = new HashSet<>(
+				Arrays.asList(new Coordinates(0, 1), new Coordinates(1, 1), new Coordinates(2, 1),
+						new Coordinates(3, 1), new Coordinates(4, 1), new Coordinates(5, 1)));
+		Set<Coordinates> expectedLocationWordPlant = new HashSet<>(Arrays.asList(new Coordinates(0, 5),
+				new Coordinates(1, 5), new Coordinates(2, 5), new Coordinates(3, 5), new Coordinates(4, 5)));
+
+		Set<Coordinates> locationWordFlower = wordSearch.findLocationForWord("FLOWER");
+		assertEquals(expectedLocationWordFlower.size(), locationWordFlower.size());
+		assertIterableEquals(expectedLocationWordFlower, locationWordFlower);
+
+		Set<Coordinates> locationWordPlant = wordSearch.findLocationForWord("PLANT");
+		assertEquals(expectedLocationWordPlant.size(), locationWordPlant.size());
+		assertIterableEquals(expectedLocationWordPlant, locationWordPlant);
 	}
 
 	private Path getResourcePath(String fileName) throws URISyntaxException {

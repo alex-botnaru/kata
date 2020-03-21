@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,7 +74,17 @@ public class WordSearch {
 	}
 
 	public Set<Coordinates> findLocationForWord(String word) {
-		Set<Coordinates> location = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0), new Coordinates(4, 0), new Coordinates(5, 0)));
+		Set<Coordinates> location = new HashSet<>();
+		for (int y = 0; y < rows.size(); y++) {
+			String row = rows.get(y);
+			int index = row.indexOf(word);
+			if (index > -1) {
+				for (int x = index; x < word.length() + index; x++) {
+					location.add(new Coordinates(x, y));
+				}
+				break;
+			}
+		}
 		return location;
 	}
 
