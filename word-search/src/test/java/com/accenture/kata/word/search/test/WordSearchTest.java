@@ -19,6 +19,7 @@ import com.accenture.kata.word.search.Coordinates;
 import com.accenture.kata.word.search.WordSearch;
 import com.accenture.kata.word.search.exception.InvalidGridException;
 import com.accenture.kata.word.search.exception.InvalidWordException;
+import com.accenture.kata.word.search.exception.WordNotFoundException;
 
 public class WordSearchTest {
 
@@ -67,7 +68,7 @@ public class WordSearchTest {
 
 	@Test
 	public void whenSearchForWordsHorizontalyForwardAndReturnTheirLocations()
-			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
+			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
 		Set<Coordinates> expectedLocationWordTree = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0),
 				new Coordinates(4, 0), new Coordinates(5, 0)));
@@ -83,7 +84,14 @@ public class WordSearchTest {
 
 	}
 	
-	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation) {
+	@Test
+	public void whenSearchForNonExistingWordAndThrowsAnExeption() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		assertThrows(WordNotFoundException.class, () -> wordSearch.findLocationForWord("BAD"));
+	}
+	
+	
+	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation) throws WordNotFoundException {
 		Set<Coordinates> actualLocation = wordSearch.findLocationForWord(word);
 		assertEquals(expectedLocation.size(), actualLocation.size());
 		assertIterableEquals(expectedLocation, actualLocation);

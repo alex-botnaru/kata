@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.accenture.kata.word.search.exception.InvalidGridException;
 import com.accenture.kata.word.search.exception.InvalidWordException;
+import com.accenture.kata.word.search.exception.WordNotFoundException;
 
 public class WordSearch {
 
@@ -73,7 +74,7 @@ public class WordSearch {
 		return words;
 	}
 
-	public Set<Coordinates> findLocationForWord(String word) {
+	public Set<Coordinates> findLocationForWord(String word) throws WordNotFoundException {
 		Set<Coordinates> location = new HashSet<>();
 		for (int y = 0; y < rows.size(); y++) {
 			String row = rows.get(y);
@@ -84,6 +85,10 @@ public class WordSearch {
 				}
 				break;
 			}
+		}
+		
+		if(location.isEmpty()) {
+			throw new WordNotFoundException(String.format("Word [%s] was not found in the grid", word));
 		}
 		return location;
 	}
