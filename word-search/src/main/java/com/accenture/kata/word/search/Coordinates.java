@@ -29,9 +29,14 @@ public class Coordinates {
 
 		return isEqual;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return x *1000 + y;
+		return x * 1000 + y;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("(%d, %d)", x, y);
 	}
 }

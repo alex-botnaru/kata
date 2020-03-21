@@ -78,10 +78,20 @@ public class WordSearch {
 		Set<Coordinates> location = new HashSet<>();
 		for (int y = 0; y < rows.size(); y++) {
 			String row = rows.get(y);
+			// Search forwards
 			int index = row.indexOf(word);
 			if (index > -1) {
-				for (int x = index; x < word.length() + index; x++) {
-					location.add(new Coordinates(x, y));
+				for (int x = 0; x < word.length(); x++) {
+					location.add(new Coordinates(x + index, y));
+				}
+				break;
+			}
+			
+			// Search backwards
+			index = row.indexOf(new StringBuilder(word).reverse().toString()); // Reverse the word
+			if (index > -1) {
+				for (int x = word.length() - 1; x >= 0; x--) {
+					location.add(new Coordinates(x + index, y));
 				}
 				break;
 			}
