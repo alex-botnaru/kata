@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,17 +70,9 @@ public class WordSearchTest {
 	public void whenSearchForWordsHorizontallyForwardAndReturnTheirLocations()
 			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
-		Set<Coordinates> expectedLocationWordTree = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0),
-				new Coordinates(4, 0), new Coordinates(5, 0)));
-		Set<Coordinates> expectedLocationWordFlower = new HashSet<>(
-				Arrays.asList(new Coordinates(0, 1), new Coordinates(1, 1), new Coordinates(2, 1),
-						new Coordinates(3, 1), new Coordinates(4, 1), new Coordinates(5, 1)));
-		Set<Coordinates> expectedLocationWordPlant = new HashSet<>(Arrays.asList(new Coordinates(0, 5),
-				new Coordinates(1, 5), new Coordinates(2, 5), new Coordinates(3, 5), new Coordinates(4, 5)));
-		
-		searchForWordLocationTest(wordSearch, "TREE", expectedLocationWordTree);
-		searchForWordLocationTest(wordSearch, "FLOWER", expectedLocationWordFlower);
-		searchForWordLocationTest(wordSearch, "PLANT", expectedLocationWordPlant);
+		searchForWordLocationTest(wordSearch, "TREE", getCoordinates(new int[][]{{2, 0}, {3, 0}, {4, 0}, {5, 0}}));
+		searchForWordLocationTest(wordSearch, "FLOWER", getCoordinates(new int[][]{{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}}));
+		searchForWordLocationTest(wordSearch, "PLANT", getCoordinates(new int[][]{{0, 5}, {1, 5}, {2, 5}, {3, 5}, {4, 5}}));
 
 	}
 	
@@ -94,13 +85,9 @@ public class WordSearchTest {
 	@Test
 	public void whenSearchForWordsHorizontallyBackwardsAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
-		Set<Coordinates> expectedLocationWordSun = new HashSet<>(Arrays.asList(new Coordinates(2, 2), new Coordinates(1, 2), new Coordinates(0, 2)));
-		Set<Coordinates> expectedLocationWordBike = new HashSet<>(Arrays.asList(new Coordinates(3, 3), new Coordinates(2, 3), new Coordinates(1, 3), new Coordinates(0, 3)));
-		Set<Coordinates> expectedLocationWordLaptop= new HashSet<>(Arrays.asList(new Coordinates(5, 4), new Coordinates(4, 4), new Coordinates(3, 4),new Coordinates(2, 4), new Coordinates(1, 4), new Coordinates(0, 4)));
-		
-		searchForWordLocationTest(wordSearch, "SUN", expectedLocationWordSun);
-		searchForWordLocationTest(wordSearch, "BIKE", expectedLocationWordBike);
-		searchForWordLocationTest(wordSearch, "LAPTOP", expectedLocationWordLaptop);
+		searchForWordLocationTest(wordSearch, "SUN", getCoordinates(new int[][]{{2, 2}, {1, 2}, {0, 2}}));
+		searchForWordLocationTest(wordSearch, "BIKE", getCoordinates(new int[][]{{3, 3}, {2, 3}, {1, 3}, {0, 3}}));
+		searchForWordLocationTest(wordSearch, "LAPTOP", getCoordinates(new int[][]{{5, 4}, {4, 4}, {3, 4}, {2, 4}, {1, 4}, {0, 4}}));
 	}
 	
 	@Test
@@ -118,31 +105,45 @@ public class WordSearchTest {
 	public void whenSearchForWordsVerticallyUpDownAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
 		// The words below don't exist in the word list, but for sake of testing, search for group of letters vertically from up down
-		Set<Coordinates> expectedLocationWordDol = new HashSet<>(Arrays.asList(new Coordinates(5, 2), new Coordinates(5, 3), new Coordinates(5, 4)));
-		Set<Coordinates> expectedLocationWordUkol = new HashSet<>(Arrays.asList(new Coordinates(1, 2), new Coordinates(1, 3), new Coordinates(1, 4), new Coordinates(1, 5)));
-		Set<Coordinates> expectedLocationWordTosita= new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(2, 1), new Coordinates(2, 2),new Coordinates(2, 3), new Coordinates(2, 4), new Coordinates(2, 5)));
-		
-		searchForWordLocationTest(wordSearch, "DOL", expectedLocationWordDol);
-		searchForWordLocationTest(wordSearch, "UKOL", expectedLocationWordUkol);
-		searchForWordLocationTest(wordSearch, "TOSITA", expectedLocationWordTosita);
+		searchForWordLocationTest(wordSearch, "DOL", getCoordinates(new int[][]{{5, 2}, {5, 3}, {5, 4}}));
+		searchForWordLocationTest(wordSearch, "UKOL", getCoordinates(new int[][]{{1, 2}, {1, 3}, {1, 4}, {1, 5}}));
+		searchForWordLocationTest(wordSearch, "TOSITA", getCoordinates(new int[][]{{2, 0}, {2, 1}, {2, 2}, {2, 3}, {2, 4}, {2, 5}}));
 	}
 	
 	@Test
 	public void whenSearchForWordsVerticallyDownUpAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
 		// The words below don't exist in the word list, but for sake of testing, search for group of letters vertically from down up
-		Set<Coordinates> expectedLocationWordPen = new HashSet<>(Arrays.asList(new Coordinates(0, 4), new Coordinates(0, 3), new Coordinates(0, 2)));
-		Set<Coordinates> expectedLocationWordOdre = new HashSet<>(Arrays.asList(new Coordinates(5, 3), new Coordinates(5, 2), new Coordinates(5, 1), new Coordinates(5, 0)));
-		Set<Coordinates> expectedLocationWordAtisot= new HashSet<>(Arrays.asList(new Coordinates(2, 5), new Coordinates(2, 4), new Coordinates(2, 3),new Coordinates(2, 2), new Coordinates(2, 1), new Coordinates(2, 0)));
-		
-		searchForWordLocationTest(wordSearch, "PEN", expectedLocationWordPen);
-		searchForWordLocationTest(wordSearch, "ODRE", expectedLocationWordOdre);
-		searchForWordLocationTest(wordSearch, "ATISOT", expectedLocationWordAtisot);
+		searchForWordLocationTest(wordSearch, "PEN", getCoordinates(new int[][]{{0, 4}, {0, 3}, {0, 2}}));
+		searchForWordLocationTest(wordSearch, "ODRE", getCoordinates(new int[][]{{5, 3}, {5, 2}, {5, 1}, {5, 0}}));
+		searchForWordLocationTest(wordSearch, "ATISOT", getCoordinates(new int[][]{{2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0}}));
+	}
+
+	/**
+	 * Helper method that returns a set of coordinates based on input
+	 * two-dimensional array
+	 * 
+	 * @param location
+	 * @return
+	 */
+	private Set<Coordinates> getCoordinates(int[][] location) {
+		Set<Coordinates> set = new HashSet<>();
+		for (int[] coordinates : location) {
+			set.add(new Coordinates(coordinates[0], coordinates[1]));
+		}
+		return set;
 	}
 	
-	
-	// vertically horizontally  
-	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation) throws WordNotFoundException {
+	/**
+	 * Helper method that search for a word and compares the expected location
+	 * 
+	 * @param wordSearch
+	 * @param word
+	 * @param expectedLocation
+	 * @throws WordNotFoundException
+	 */
+	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation)
+			throws WordNotFoundException {
 		Set<Coordinates> actualLocation = wordSearch.findLocationForWord(word);
 		assertEquals(expectedLocation.size(), actualLocation.size());
 		assertIterableEquals(expectedLocation, actualLocation);
