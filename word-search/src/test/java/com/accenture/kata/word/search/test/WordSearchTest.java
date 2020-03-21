@@ -68,7 +68,7 @@ public class WordSearchTest {
 	}
 
 	@Test
-	public void whenSearchForWordsHorizontalyForwardAndReturnTheirLocations()
+	public void whenSearchForWordsHorizontallyForwardAndReturnTheirLocations()
 			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
 		Set<Coordinates> expectedLocationWordTree = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0),
@@ -92,7 +92,7 @@ public class WordSearchTest {
 	}
 	
 	@Test
-	public void whenSearchForWordsHorizontalyBackwardsAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+	public void whenSearchForWordsHorizontallyBackwardsAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
 		Set<Coordinates> expectedLocationWordSun = new HashSet<>(Arrays.asList(new Coordinates(2, 2), new Coordinates(1, 2), new Coordinates(0, 2)));
 		Set<Coordinates> expectedLocationWordBike = new HashSet<>(Arrays.asList(new Coordinates(3, 3), new Coordinates(2, 3), new Coordinates(1, 3), new Coordinates(0, 3)));
@@ -114,7 +114,21 @@ public class WordSearchTest {
 		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-3, -4));
 	}
 	
+	@Test
+	public void whenSearchForWordsVerticallyUpDownAndReturnTheirLocations() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		// The words below don't exist in the word list, but for sake of testing, search for group of letters vertically from up down
+		Set<Coordinates> expectedLocationWordDol = new HashSet<>(Arrays.asList(new Coordinates(5, 2), new Coordinates(5, 3), new Coordinates(5, 4)));
+		Set<Coordinates> expectedLocationWordUkol = new HashSet<>(Arrays.asList(new Coordinates(1, 2), new Coordinates(1, 3), new Coordinates(1, 4), new Coordinates(1, 5)));
+		Set<Coordinates> expectedLocationWordTosita= new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(2, 1), new Coordinates(2, 2),new Coordinates(2, 3), new Coordinates(2, 4), new Coordinates(2, 5)));
+		
+		searchForWordLocationTest(wordSearch, "DOL", expectedLocationWordDol);
+		searchForWordLocationTest(wordSearch, "UKOL", expectedLocationWordUkol);
+		searchForWordLocationTest(wordSearch, "TOSITA", expectedLocationWordTosita);
+	}
 	
+	
+	// vertically horizontally  
 	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation) throws WordNotFoundException {
 		Set<Coordinates> actualLocation = wordSearch.findLocationForWord(word);
 		assertEquals(expectedLocation.size(), actualLocation.size());

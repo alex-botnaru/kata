@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.accenture.kata.word.search.exception.InvalidGridException;
 import com.accenture.kata.word.search.exception.InvalidWordException;
@@ -16,11 +18,13 @@ public class WordSearch {
 
 	private List<Word> words;
 	private List<String> rows;
+	private List<String> columns;
 	private int gridSize;
 
 	public WordSearch(Path path) throws IOException, InvalidWordException, InvalidGridException {
 		words = new ArrayList<>();
 		rows = new ArrayList<>();
+		columns = new ArrayList<>();
 		gridSize = -1;
 		List<String> lines = Files.readAllLines(path);
 
@@ -31,6 +35,7 @@ public class WordSearch {
 	private void processListOfWords(String firstLine) throws InvalidWordException {
 		// First line should contain all the words
 		String[] listOfWords = firstLine.split(",");
+
 		for (String word : listOfWords) {
 
 			if (word.length() < 2) {
@@ -46,6 +51,9 @@ public class WordSearch {
 	}
 
 	private void processGrid(List<String> lines) throws InvalidGridException {
+
+		List<StringBuilder> builderColumns = Stream.generate(StringBuilder::new).limit(lines.size())
+				.collect(Collectors.toList());
 		for (int i = 1; i < lines.size(); i++) {
 			String row = lines.get(i).replaceAll("[ ,]", "");
 
@@ -59,10 +67,17 @@ public class WordSearch {
 				throw new InvalidGridException("The Grid has invalid number of columns");
 			}
 			rows.add(row);
+			for (int chIndex = 0; chIndex < row.length(); chIndex++) {
+				builderColumns.get(chIndex).append(row.charAt(chIndex));
+			}
 		}
 
 		if (rows.size() != gridSize) {
 			throw new InvalidGridException("The Grid has to many rows");
+		}
+
+		for (StringBuilder column : builderColumns) {
+			columns.add(column.toString());
 		}
 	}
 
@@ -78,7 +93,7 @@ public class WordSearch {
 		Set<Coordinates> location = new HashSet<>();
 		for (int y = 0; y < rows.size(); y++) {
 			String row = rows.get(y);
-			// Search forwards
+			// Search horizontally forwards
 			int index = row.indexOf(word);
 			if (index > -1) {
 				for (int x = 0; x < word.length(); x++) {
@@ -86,8 +101,8 @@ public class WordSearch {
 				}
 				break;
 			}
-			
-			// Search backwards
+
+			// Search horizontally backwards
 			index = row.indexOf(new StringBuilder(word).reverse().toString()); // Reverse the word
 			if (index > -1) {
 				for (int x = word.length() - 1; x >= 0; x--) {
@@ -96,8 +111,21 @@ public class WordSearch {
 				break;
 			}
 		}
-		
-		if(location.isEmpty()) {
+
+		for (int x = 0; x < columns.size(); x++) {
+			String column = columns.get(x);
+			// Search vertically up down
+			int index = column.indexOf(word);
+			if (index > -1) {
+				for (int y = 0; y < word.length(); y++) {
+					location.add(new Coordinates(x, y + index));
+				}
+				break;
+			}
+
+		}
+
+		if (location.isEmpty()) {
 			throw new WordNotFoundException(String.format("Word [%s] was not found in the grid", word));
 		}
 		return location;
