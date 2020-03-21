@@ -66,33 +66,27 @@ public class WordSearchTest {
 	}
 
 	@Test
-	public void whenSearchForHorizontalWordTreeAndReturnsLocation()
-			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
-		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
-		Set<Coordinates> expectedLocation = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0),
-				new Coordinates(4, 0), new Coordinates(5, 0)));
-		Set<Coordinates> location = wordSearch.findLocationForWord("TREE");
-		assertEquals(expectedLocation.size(), location.size());
-		assertIterableEquals(expectedLocation, location);
-	}
-
-	@Test
 	public void whenSearchForWordsHorizontalyForwardAndReturnTheirLocations()
 			throws IOException, InvalidWordException, InvalidGridException, URISyntaxException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size6.txt"));
+		Set<Coordinates> expectedLocationWordTree = new HashSet<>(Arrays.asList(new Coordinates(2, 0), new Coordinates(3, 0),
+				new Coordinates(4, 0), new Coordinates(5, 0)));
 		Set<Coordinates> expectedLocationWordFlower = new HashSet<>(
 				Arrays.asList(new Coordinates(0, 1), new Coordinates(1, 1), new Coordinates(2, 1),
 						new Coordinates(3, 1), new Coordinates(4, 1), new Coordinates(5, 1)));
 		Set<Coordinates> expectedLocationWordPlant = new HashSet<>(Arrays.asList(new Coordinates(0, 5),
 				new Coordinates(1, 5), new Coordinates(2, 5), new Coordinates(3, 5), new Coordinates(4, 5)));
+		
+		searchForWordLocationTest(wordSearch, "TREE", expectedLocationWordTree);
+		searchForWordLocationTest(wordSearch, "FLOWER", expectedLocationWordFlower);
+		searchForWordLocationTest(wordSearch, "PLANT", expectedLocationWordPlant);
 
-		Set<Coordinates> locationWordFlower = wordSearch.findLocationForWord("FLOWER");
-		assertEquals(expectedLocationWordFlower.size(), locationWordFlower.size());
-		assertIterableEquals(expectedLocationWordFlower, locationWordFlower);
-
-		Set<Coordinates> locationWordPlant = wordSearch.findLocationForWord("PLANT");
-		assertEquals(expectedLocationWordPlant.size(), locationWordPlant.size());
-		assertIterableEquals(expectedLocationWordPlant, locationWordPlant);
+	}
+	
+	private void searchForWordLocationTest(WordSearch wordSearch, String word, Set<Coordinates> expectedLocation) {
+		Set<Coordinates> actualLocation = wordSearch.findLocationForWord(word);
+		assertEquals(expectedLocation.size(), actualLocation.size());
+		assertIterableEquals(expectedLocation, actualLocation);
 	}
 
 	private Path getResourcePath(String fileName) throws URISyntaxException {
