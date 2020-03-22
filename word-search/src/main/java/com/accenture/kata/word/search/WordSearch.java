@@ -182,6 +182,7 @@ public class WordSearch {
 				String letters = diagonalLeftRight.get(i);
 				// Search for word in a list of letters forwards and backwards
 				int forwardIndex = letters.indexOf(word);
+				int backwardIndex = letters.indexOf(reverseString(word));
 
 				if (i < gridSize) {
 					y--;
@@ -191,6 +192,8 @@ public class WordSearch {
 
 				if (forwardIndex > -1) {
 					location.addAll(coordinatesGeneratorDiagonallyLeftRightForwards.generate(x + forwardIndex, y + forwardIndex, word.length()));
+				} else if (backwardIndex > -1) {
+					location.addAll(coordinatesGeneratorDiagonallyLeftRightForwards.generate(x + backwardIndex, y + backwardIndex, word.length()));
 				}
 
 				if (!location.isEmpty()) {
