@@ -21,6 +21,38 @@ public class WordSearch {
 	private List<String> columns;
 	private int gridSize;
 
+	private final CoordinatesGenerator coordinatesGeneratorHorizontallyForwards = (a, i, l) -> {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (int x = 0; x < l; x++) {
+			coordinates.add(new Coordinates(x + i, a));
+		}
+		return coordinates;
+	};
+
+	private final CoordinatesGenerator coordinatesGeneratorHorizontallyBackwards = (a, i, l) -> {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (int x = l - 1; x >= 0; x--) {
+			coordinates.add(new Coordinates(x + i, a));
+		}
+		return coordinates;
+	};
+
+	private final CoordinatesGenerator coordinatesGeneratorVerticallyForwards = (a, i, l) -> {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (int y = 0; y < l; y++) {
+			coordinates.add(new Coordinates(a, y + i));
+		}
+		return coordinates;
+	};
+
+	private final CoordinatesGenerator coordinatesGeneratorVerticallyBackwards = (a, i, l) -> {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (int y = l - 1; y >= 0; y--) {
+			coordinates.add(new Coordinates(a, y + i));
+		}
+		return coordinates;
+	};
+
 	public WordSearch(Path path) throws IOException, InvalidWordException, InvalidGridException {
 		words = new ArrayList<>();
 		rows = new ArrayList<>();
@@ -91,53 +123,56 @@ public class WordSearch {
 
 	public Set<Coordinates> findLocationForWord(String word) throws WordNotFoundException {
 		Set<Coordinates> location = new HashSet<>();
-		for (int y = 0; y < rows.size(); y++) {
-			String row = rows.get(y);
-			// Search horizontally forwards
-			int index = row.indexOf(word);
-			if (index > -1) {
-				for (int x = 0; x < word.length(); x++) {
-					location.add(new Coordinates(x + index, y));
-				}
-				break;
-			}
-
-			// Search horizontally backwards
-			index = row.indexOf(new StringBuilder(word).reverse().toString()); // Reverse the word
-			if (index > -1) {
-				for (int x = word.length() - 1; x >= 0; x--) {
-					location.add(new Coordinates(x + index, y));
-				}
-				break;
-			}
-		}
-
-		for (int x = 0; x < columns.size(); x++) {
-			String column = columns.get(x);
-			// Search vertically up down
-			int index = column.indexOf(word);
-			if (index > -1) {
-				for (int y = 0; y < word.length(); y++) {
-					location.add(new Coordinates(x, y + index));
-				}
-				break;
-			}
-
-			// Search vertically down up
-			index = column.indexOf(new StringBuilder(word).reverse().toString()); // Reverse the word
-			if (index > -1) {
-				for (int y = word.length() - 1; y >= 0; y--) {
-					location.add(new Coordinates(x, y + index));
-				}
-				break;
-			}
-
-		}
+		searchWordHorizontally(word, location);
+		searchWordVertically(word, location);
 
 		if (location.isEmpty()) {
 			throw new WordNotFoundException(String.format("Word [%s] was not found in the grid", word));
 		}
 		return location;
+	}
+
+	private void searchWordHorizontally(String word, Set<Coordinates> location) {
+		if (location.isEmpty()) {
+			location.addAll(searchWordInListOfLetters(word, rows, coordinatesGeneratorHorizontallyForwards,
+					coordinatesGeneratorHorizontallyBackwards));
+		}
+	}
+
+	private void searchWordVertically(String word, Set<Coordinates> location) {
+		if (location.isEmpty()) {
+			location.addAll(searchWordInListOfLetters(word, columns, coordinatesGeneratorVerticallyForwards,
+					coordinatesGeneratorVerticallyBackwards));
+		}
+	}
+
+	private Set<Coordinates> searchWordInListOfLetters(String word, List<String> lettersList,
+			CoordinatesGenerator forward, CoordinatesGenerator backward) {
+		Set<Coordinates> location = new HashSet<>();
+		for (int i = 0; i < lettersList.size(); i++) {
+			String letters = lettersList.get(i);
+			
+			// Search for word in a list of letters forwards and backwards
+			int forwardIndex = letters.indexOf(word);
+			int backwardIndex = letters.indexOf(reverseString(word));
+
+			// If found generate coordinates
+			if (forwardIndex > -1) {
+				location.addAll(forward.generate(i, forwardIndex, word.length()));
+			} else if (backwardIndex > -1) {
+				location.addAll(backward.generate(i, backwardIndex, word.length()));
+			}
+
+			if (!location.isEmpty())
+				// Word is found, no need to search further
+				break;
+		}
+
+		return location;
+	}
+
+	private String reverseString(String value) {
+		return new StringBuilder(value).reverse().toString();
 	}
 
 }
