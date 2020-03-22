@@ -118,6 +118,15 @@ public class WordSearchTest {
 		searchForWordLocationTest(wordSearch, "ODRE", getCoordinates(new int[][]{{5, 3}, {5, 2}, {5, 1}, {5, 0}}));
 		searchForWordLocationTest(wordSearch, "ATISOT", getCoordinates(new int[][]{{2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0}}));
 	}
+	
+	@Test
+	public void whenSearchForWordsDiagonallyLeftRightForwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size8.txt"));
+		searchForWordLocationTest(wordSearch, "INK", getCoordinates(new int[][]{{0, 1}, {1, 2}, {2, 3}}));
+		searchForWordLocationTest(wordSearch, "GROUP", getCoordinates(new int[][]{{0, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6}}));
+		searchForWordLocationTest(wordSearch, "TOE", getCoordinates(new int[][]{{0, 4}, {1, 5}, {2, 6}}));
+
+	}
 
 	/**
 	 * Helper method that returns a set of coordinates based on input

@@ -19,6 +19,7 @@ public class WordSearch {
 	private List<Word> words;
 	private List<String> rows;
 	private List<String> columns;
+	private List<String> diagonalLeftRight;
 	private int gridSize;
 
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyForwards = (a, i, l) -> {
@@ -53,10 +54,19 @@ public class WordSearch {
 		return coordinates;
 	};
 
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRightForwards = (x, y, l) -> {
+		Set<Coordinates> coordinates = new HashSet<>();
+		for (int i = 0; i < l; i++) {
+			coordinates.add(new Coordinates(x + i, y + i));
+		}
+		return coordinates;
+	};
+
 	public WordSearch(Path path) throws IOException, InvalidWordException, InvalidGridException {
 		words = new ArrayList<>();
 		rows = new ArrayList<>();
 		columns = new ArrayList<>();
+		diagonalLeftRight = new ArrayList<>();
 		gridSize = -1;
 		List<String> lines = Files.readAllLines(path);
 
@@ -111,6 +121,22 @@ public class WordSearch {
 		for (StringBuilder column : builderColumns) {
 			columns.add(column.toString());
 		}
+
+		int dimension = gridSize * 2;
+		for (int j = 0; j < dimension; j++) {
+			StringBuilder diagonalLetters = new StringBuilder();
+			for (int col = 0; col <= j; col++) {
+				int row = j - col;
+				int middle = gridSize - row;
+				if (middle >= 0 && middle < gridSize && col < gridSize) {
+					diagonalLetters.append(rows.get(middle).charAt(col));
+				}
+			}
+
+			if (diagonalLetters.length() > 0) {
+				diagonalLeftRight.add(diagonalLetters.toString());
+			}
+		}
 	}
 
 	private boolean containsNumbers(String value) {
@@ -125,6 +151,7 @@ public class WordSearch {
 		Set<Coordinates> location = new HashSet<>();
 		searchWordHorizontally(word, location);
 		searchWordVertically(word, location);
+		searchWrodDiagonallyLeftRight(word, location);
 
 		if (location.isEmpty()) {
 			throw new WordNotFoundException(String.format("Word [%s] was not found in the grid", word));
@@ -146,12 +173,41 @@ public class WordSearch {
 		}
 	}
 
+	private void searchWrodDiagonallyLeftRight(String word, Set<Coordinates> location) {
+		if (location.isEmpty()) {
+
+			int x = 0;
+			int y = gridSize;
+			for (int i = 0; i < diagonalLeftRight.size(); i++) {
+				String letters = diagonalLeftRight.get(i);
+				// Search for word in a list of letters forwards and backwards
+				int forwardIndex = letters.indexOf(word);
+
+				if (i < gridSize) {
+					y--;
+				} else {
+					x++;
+				}
+
+				if (forwardIndex > -1) {
+					location.addAll(coordinatesGeneratorDiagonallyLeftRightForwards.generate(x + forwardIndex, y + forwardIndex, word.length()));
+				}
+
+				if (!location.isEmpty()) {
+					// Word is found, no need to search further
+					break;
+				}
+
+			}
+		}
+	}
+
 	private Set<Coordinates> searchWordInListOfLetters(String word, List<String> lettersList,
 			CoordinatesGenerator forward, CoordinatesGenerator backward) {
 		Set<Coordinates> location = new HashSet<>();
 		for (int i = 0; i < lettersList.size(); i++) {
 			String letters = lettersList.get(i);
-			
+
 			// Search for word in a list of letters forwards and backwards
 			int forwardIndex = letters.indexOf(word);
 			int backwardIndex = letters.indexOf(reverseString(word));
@@ -163,9 +219,10 @@ public class WordSearch {
 				location.addAll(backward.generate(i, backwardIndex, word.length()));
 			}
 
-			if (!location.isEmpty())
+			if (!location.isEmpty()) {
 				// Word is found, no need to search further
 				break;
+			}
 		}
 
 		return location;
