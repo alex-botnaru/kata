@@ -146,6 +146,13 @@ public class WordSearchTest {
 		searchForWordLocationTest(wordSearchSize8, "ROSA", getCoordinates(new int[][]{{1, 3}, {2, 2}, {3, 1}, {4, 0}}));
 	}
 	
+	@Test
+	public void whenSearchForWordsDiagonallyRightLeftBackwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+		searchForWordLocationTest(wordSearchSize8, "MARKET", getCoordinates(new int[][]{{5, 0}, {4, 1}, {3, 2}, {2, 3}, {1, 4}, {0, 5}}));
+		searchForWordLocationTest(wordSearchSize8, "SORT", getCoordinates(new int[][]{{3, 1}, {2, 2}, {1, 3}, {0, 4}}));
+		searchForWordLocationTest(wordSearchSize8, "ORINE", getCoordinates(new int[][]{{2, 4}, {3, 3}, {4, 2}, {5, 1}, {6, 0}}));
+	}
+	
 	/**
 	 * Helper method that returns a set of coordinates based on input
 	 * two-dimensional array
