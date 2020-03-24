@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public class WordSearch {
 	private int gridSize;
 
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyForwards = (a, i, l) -> {
-		Set<Coordinates> coordinates = new HashSet<>();
+		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int x = 0; x < l; x++) {
 			coordinates.add(new Coordinates(x + i, a, x));
 		}
@@ -32,15 +32,15 @@ public class WordSearch {
 	};
 
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyBackwards = (a, i, l) -> {
-		Set<Coordinates> coordinates = new HashSet<>();
-		for (int x = l - 1; x >= 0; x--) {
-			coordinates.add(new Coordinates(x + i, a, x));
+		Set<Coordinates> coordinates = new TreeSet<>();
+		for(int x = 0; x < l; x++) {
+			coordinates.add(new Coordinates(l - x - 1 + i, a, x));
 		}
 		return coordinates;
 	};
 
 	private final CoordinatesGenerator coordinatesGeneratorVerticallyForwards = (a, i, l) -> {
-		Set<Coordinates> coordinates = new HashSet<>();
+		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int y = 0; y < l; y++) {
 			coordinates.add(new Coordinates(a, y + i, y));
 		}
@@ -48,25 +48,41 @@ public class WordSearch {
 	};
 
 	private final CoordinatesGenerator coordinatesGeneratorVerticallyBackwards = (a, i, l) -> {
-		Set<Coordinates> coordinates = new HashSet<>();
-		for (int y = l - 1; y >= 0; y--) {
-			coordinates.add(new Coordinates(a, y + i, y));
+		Set<Coordinates> coordinates = new TreeSet<>();
+		for (int y = 0; y < l; y++) {
+			coordinates.add(new Coordinates(a, l - 1 - y + i, y));
 		}
 		return coordinates;
 	};
 
-	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRight = (x, y, l) -> {
-		Set<Coordinates> coordinates = new HashSet<>();
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRightForwards = (x, y, l) -> {
+		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int i = 0; i < l; i++) {
 			coordinates.add(new Coordinates(x + i, y + i, i));
 		}
 		return coordinates;
 	};
+	
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRightBackwards = (x, y, l) -> {
+		Set<Coordinates> coordinates = new TreeSet<>();
+		for (int i = 0; i < l; i++) {
+			coordinates.add(new Coordinates(x - i, y - i, i));
+		}
+		return coordinates;
+	};
 
-	private final CoordinatesGenerator coordinatesGeneratorDiagonallyRightLeft = (x, y, l) -> {
-		Set<Coordinates> coordinates = new HashSet<>();
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyRightLeftForwards = (x, y, l) -> {
+		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int i = 0; i < l; i++) {
 			coordinates.add(new Coordinates(x + i, y - i, i));
+		}
+		return coordinates;
+	};
+	
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyRightLeftBackwards = (x, y, l) -> {
+		Set<Coordinates> coordinates = new TreeSet<>();
+		for (int i = 0; i < l; i++) {
+			coordinates.add(new Coordinates(x - i, y + i, i));
 		}
 		return coordinates;
 	};
@@ -165,7 +181,7 @@ public class WordSearch {
 	}
 
 	public Set<Coordinates> findLocationForWord(String word) throws WordNotFoundException {
-		Set<Coordinates> location = new HashSet<>();
+		Set<Coordinates> location = new TreeSet<>();
 		searchWordHorizontally(word, location);
 		searchWordVertically(word, location);
 		searchWrodDiagonallyLeftRight(word, location);
@@ -199,10 +215,8 @@ public class WordSearch {
 			for (int i = 0; i < diagonalLeftRight.size(); i++) {
 				String letters = diagonalLeftRight.get(i);
 				// Search for word in a list of letters forwards and backwards
-				int index = letters.indexOf(word);
-				if(index < 0) {
-					index = letters.indexOf(reverseString(word));
-				}
+				int forwardIndex = letters.indexOf(word);
+				int backwardIndex = letters.indexOf(reverseString(word));
 				
 				if (i < gridSize) {
 					y--;
@@ -210,10 +224,13 @@ public class WordSearch {
 					x++;
 				}
 
-				if (index > -1) {
-					location.addAll(coordinatesGeneratorDiagonallyLeftRight.generate(x + index,
-							y + index, word.length()));
-				} 
+				if (forwardIndex > -1) {
+					location.addAll(coordinatesGeneratorDiagonallyLeftRightForwards.generate(x + forwardIndex,
+							y + forwardIndex, word.length()));
+				} else if(backwardIndex > -1) {
+					backwardIndex += word.length() - 1;
+					location.addAll(coordinatesGeneratorDiagonallyLeftRightBackwards.generate(x + backwardIndex, y + backwardIndex, word.length()));
+				}
 
 				if (!location.isEmpty()) {
 					// Word is found, no need to search further
@@ -231,10 +248,8 @@ public class WordSearch {
 			for (int i = 0; i < diagonalRightLeft.size(); i++) {
 				String letters = diagonalRightLeft.get(i);
 				// Search for word in a list of letters forwards and backwards
-				int index = letters.indexOf(word);
-				if(index < 0) {
-					index = letters.indexOf(reverseString(word));
-				}
+				int forwardIndex = letters.indexOf(word);
+				int backwardIndex = letters.indexOf(reverseString(word));
 				
 				if (i < gridSize) {
 					y++;
@@ -242,9 +257,12 @@ public class WordSearch {
 					x++;
 				}
 				
-				if (index > -1) {
-					location.addAll(coordinatesGeneratorDiagonallyRightLeft.generate(x + index,
-							y - index, word.length()));
+				if (forwardIndex > -1) {
+					location.addAll(coordinatesGeneratorDiagonallyRightLeftForwards.generate(x + forwardIndex,
+							y - forwardIndex, word.length()));
+				} else if (backwardIndex > -1) {
+					backwardIndex += word.length() - 1;
+					location.addAll(coordinatesGeneratorDiagonallyRightLeftBackwards.generate(x + backwardIndex, y - backwardIndex, word.length()));
 				}
 
 				if (!location.isEmpty()) {
@@ -258,7 +276,7 @@ public class WordSearch {
 
 	private Set<Coordinates> searchWordInListOfLetters(String word, List<String> lettersList,
 			CoordinatesGenerator forward, CoordinatesGenerator backward) {
-		Set<Coordinates> location = new HashSet<>();
+		Set<Coordinates> location = new TreeSet<>();
 		for (int i = 0; i < lettersList.size(); i++) {
 			String letters = lettersList.get(i);
 

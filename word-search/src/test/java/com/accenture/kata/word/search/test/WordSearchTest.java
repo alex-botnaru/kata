@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -94,6 +94,7 @@ public class WordSearchTest {
 		searchForWordLocationTest(wordSearchSize6, "SUN", getCoordinates(new int[][]{{2, 2}, {1, 2}, {0, 2}}));
 		searchForWordLocationTest(wordSearchSize6, "BIKE", getCoordinates(new int[][]{{3, 3}, {2, 3}, {1, 3}, {0, 3}}));
 		searchForWordLocationTest(wordSearchSize6, "LAPTOP", getCoordinates(new int[][]{{5, 4}, {4, 4}, {3, 4}, {2, 4}, {1, 4}, {0, 4}}));
+		searchForWordLocationTest(wordSearchSize8, "HIRO", getCoordinates(new int[][]{{5, 2}, {4, 2}, {3, 2}, {2, 2}}));
 	}
 	
 	@Test
@@ -139,7 +140,7 @@ public class WordSearchTest {
 		searchForWordLocationTest(wordSearchSize8, "MIST", getCoordinates(new int[][]{{5, 3}, {4, 2}, {3, 1}, {2, 0}}));
 		searchForWordLocationTest(wordSearchSize8, "THROAT", getCoordinates(new int[][]{{5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}, {0, 0}}));
 		// Next words don't exist in word list, just for testing purpose
-		searchForWordLocationTest(wordSearchSize8, "AHA", getCoordinates(new int[][]{{6, 3}, {5, 2}, {4, 1}}));
+		searchForWordLocationTest(wordSearchSize8, "AHAE", getCoordinates(new int[][]{{6, 3}, {5, 2}, {4, 1}, {3, 0}}));
 		searchForWordLocationTest(wordSearchSize8, "HURK", getCoordinates(new int[][]{{5, 6}, {4, 5}, {3, 4}, {2, 3}}));
 	}
 	
@@ -165,7 +166,7 @@ public class WordSearchTest {
 	 * @return
 	 */
 	private Set<Coordinates> getCoordinates(int[][] location) {
-		Set<Coordinates> set = new HashSet<>();
+		Set<Coordinates> set = new TreeSet<>();
 		for (int index = 0; index < location.length; index++) {
 			int[] coordinates = location[index];
 			set.add(new Coordinates(coordinates[0], coordinates[1], index));

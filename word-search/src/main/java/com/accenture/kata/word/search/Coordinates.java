@@ -1,6 +1,6 @@
 package com.accenture.kata.word.search;
 
-public class Coordinates {
+public class Coordinates implements Comparable<Coordinates> {
 
 	private int x;
 	private int y;
@@ -35,7 +35,7 @@ public class Coordinates {
 
 		if (obj instanceof Coordinates) {
 			Coordinates other = (Coordinates) obj;
-			isEqual = x == other.x && y == other.y;
+			isEqual = x == other.x && y == other.y && index == other.index;
 		}
 
 		return isEqual;
@@ -43,11 +43,18 @@ public class Coordinates {
 
 	@Override
 	public int hashCode() {
-		return x * 1000 + y;
+		// Letter position matters, hash doesn't always guarantee correct position
+		// use a slower TreeSet instead
+		return (index * 1000000) + (x * 1000) + y;
 	}
 
 	@Override
 	public String toString() {
 		return String.format("(%d, %d)", x, y);
+	}
+
+	@Override
+	public int compareTo(Coordinates o) {
+		return index - o.index;
 	}
 }
