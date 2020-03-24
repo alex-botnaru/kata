@@ -26,7 +26,7 @@ public class WordSearch {
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyForwards = (a, i, l) -> {
 		Set<Coordinates> coordinates = new HashSet<>();
 		for (int x = 0; x < l; x++) {
-			coordinates.add(new Coordinates(x + i, a));
+			coordinates.add(new Coordinates(x + i, a, x));
 		}
 		return coordinates;
 	};
@@ -34,7 +34,7 @@ public class WordSearch {
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyBackwards = (a, i, l) -> {
 		Set<Coordinates> coordinates = new HashSet<>();
 		for (int x = l - 1; x >= 0; x--) {
-			coordinates.add(new Coordinates(x + i, a));
+			coordinates.add(new Coordinates(x + i, a, x));
 		}
 		return coordinates;
 	};
@@ -42,7 +42,7 @@ public class WordSearch {
 	private final CoordinatesGenerator coordinatesGeneratorVerticallyForwards = (a, i, l) -> {
 		Set<Coordinates> coordinates = new HashSet<>();
 		for (int y = 0; y < l; y++) {
-			coordinates.add(new Coordinates(a, y + i));
+			coordinates.add(new Coordinates(a, y + i, y));
 		}
 		return coordinates;
 	};
@@ -50,7 +50,7 @@ public class WordSearch {
 	private final CoordinatesGenerator coordinatesGeneratorVerticallyBackwards = (a, i, l) -> {
 		Set<Coordinates> coordinates = new HashSet<>();
 		for (int y = l - 1; y >= 0; y--) {
-			coordinates.add(new Coordinates(a, y + i));
+			coordinates.add(new Coordinates(a, y + i, y));
 		}
 		return coordinates;
 	};
@@ -58,7 +58,7 @@ public class WordSearch {
 	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRight = (x, y, l) -> {
 		Set<Coordinates> coordinates = new HashSet<>();
 		for (int i = 0; i < l; i++) {
-			coordinates.add(new Coordinates(x + i, y + i));
+			coordinates.add(new Coordinates(x + i, y + i, i));
 		}
 		return coordinates;
 	};
@@ -66,7 +66,7 @@ public class WordSearch {
 	private final CoordinatesGenerator coordinatesGeneratorDiagonallyRightLeft = (x, y, l) -> {
 		Set<Coordinates> coordinates = new HashSet<>();
 		for (int i = 0; i < l; i++) {
-			coordinates.add(new Coordinates(x + i, y - i));
+			coordinates.add(new Coordinates(x + i, y - i, i));
 		}
 		return coordinates;
 	};

@@ -4,15 +4,17 @@ public class Coordinates {
 
 	private int x;
 	private int y;
+	private int index; // letter index in the word
 
-	public Coordinates(int x, int y) {
+	public Coordinates(int x, int y, int index) {
 
-		if (x < 0 || y < 0) {
+		if (x < 0 || y < 0 || index < 0) {
 			throw new IllegalArgumentException("Coordinates values must by positive");
 		}
 
 		this.x = x;
 		this.y = y;
+		this.index = index;
 	}
 
 	public int getX() {
@@ -21,6 +23,10 @@ public class Coordinates {
 
 	public int getY() {
 		return y;
+	}
+
+	public int getIndex() {
+		return index;
 	}
 
 	@Override

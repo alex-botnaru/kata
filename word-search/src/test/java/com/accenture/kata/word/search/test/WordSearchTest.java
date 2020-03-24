@@ -98,13 +98,17 @@ public class WordSearchTest {
 	
 	@Test
 	public void whenCreatingCoordinatesObjectsWithPositiveAndNegativeValues() {
-		assertDoesNotThrow(() -> new Coordinates(0, 0));
-		assertDoesNotThrow(() -> new Coordinates(4, 0));
-		assertDoesNotThrow(() -> new Coordinates(0, 8));
-		assertDoesNotThrow(() -> new Coordinates(77, 22));
-		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-1, 4));
-		assertThrows(IllegalArgumentException.class, () -> new Coordinates(2, -10));
-		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-3, -4));
+		assertDoesNotThrow(() -> new Coordinates(0, 0, 0));
+		assertDoesNotThrow(() -> new Coordinates(4, 0, 0));
+		assertDoesNotThrow(() -> new Coordinates(0, 8, 1));
+		assertDoesNotThrow(() -> new Coordinates(77, 22, 47));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-1, 4, 2));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(2, -10, 1));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-3, -4, 0));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(7, 8, -14));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(2, -1, -1));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-3, 0, -1));
+		assertThrows(IllegalArgumentException.class, () -> new Coordinates(-2, -3, -2));
 	}
 	
 	@Test
@@ -162,8 +166,9 @@ public class WordSearchTest {
 	 */
 	private Set<Coordinates> getCoordinates(int[][] location) {
 		Set<Coordinates> set = new HashSet<>();
-		for (int[] coordinates : location) {
-			set.add(new Coordinates(coordinates[0], coordinates[1]));
+		for (int index = 0; index < location.length; index++) {
+			int[] coordinates = location[index];
+			set.add(new Coordinates(coordinates[0], coordinates[1], index));
 		}
 		return set;
 	}
