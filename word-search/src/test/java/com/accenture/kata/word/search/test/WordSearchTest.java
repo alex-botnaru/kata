@@ -42,20 +42,15 @@ public class WordSearchTest {
 	}
 
 	@Test
-	public void whenWordSearchLoadsAFileWithInvalidWordAndThrowsAnException() {
+	public void whenWordSearchLoadsFilesWithInvalidWordsAndThrowsAnException() {
 
-		assertThrows(InvalidWordException.class,
-				() -> new WordSearch(getResourcePath("word-search-input-invalid-word.txt")));
-		assertThrows(InvalidWordException.class,
-				() -> new WordSearch(getResourcePath("word-search-input-missing-words.txt")));
-		assertThrows(InvalidWordException.class,
-				() -> new WordSearch(getResourcePath("word-search-input-no-words-list.txt")));
-	}
-
-	@Test
-	public void whenWordSearchLoadsAFileWithAWordCotainingNumberAndThrowsAnException() {
-		assertThrows(InvalidWordException.class,
-				() -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-number.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-missing-words.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-no-words-list.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-lower-case-letter.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-number.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-spaces.txt")));
+		assertThrows(InvalidWordException.class, () -> new WordSearch(getResourcePath("word-search-input-invalid-word-with-special-char.txt")));
 	}
 
 	@Test

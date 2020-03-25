@@ -102,31 +102,26 @@ public class WordSearch {
 
 	private void processListOfWords(String firstLine) throws InvalidWordException {
 		// First line should contain all the words
+		if(!firstLine.matches("^[A-Z]{2,}(,[A-Z]{2,})*")) {
+			throw new InvalidWordException("The words should be at least 2 letters long, only upercase letters and separated by comma.");
+		}
+		
 		String[] listOfWords = firstLine.split(",");
 
 		for (String word : listOfWords) {
-
-			if (word.length() < 2) {
-				throw new InvalidWordException("A word should be minimum two letters long.");
-			}
-
-			if (containsNumbers(word)) {
-				throw new InvalidWordException("A word should not contain numbers.");
-			}
-
 			words.add(new Word(word));
 		}
 	}
 
 	private void processGrid(List<String> lines) throws InvalidGridException {
 
-		List<StringBuilder> builderColumns = Stream.generate(StringBuilder::new).limit(lines.size())
+		List<StringBuilder> builderColumns = Stream.generate(StringBuilder::new).limit(lines.size() - 1)
 				.collect(Collectors.toList());
 		for (int i = 1; i < lines.size(); i++) {
 			String row = lines.get(i);
 
-			if (!isGridRowValid(row)) {
-				throw new InvalidGridException("The grid should contain only upper case letters delimited by comma.");
+			if (!row.matches("^[A-Z]{1}(,[A-Z])+")) {
+				throw new InvalidGridException("The grid should contain only upper case letters separated by comma.");
 			}
 			row = row.replace(",", "");
 
@@ -144,7 +139,7 @@ public class WordSearch {
 		}
 
 		if (rows.size() != gridSize) {
-			throw new InvalidGridException("The Grid has to many rows");
+			throw new InvalidGridException("The Grid has invalid number of rows");
 		}
 
 		for (StringBuilder column : builderColumns) {
@@ -180,14 +175,6 @@ public class WordSearch {
 				diagonalDescending.add(diagonalLettersDescending.toString());
 			}
 		}
-	}
-
-	private boolean containsNumbers(String value) {
-		return value.matches(".*\\d.*");
-	}
-	
-	private boolean isGridRowValid(String row) {
-		return row.matches("^[A-Z]{1}(,[A-Z])+");
 	}
 
 	public List<Word> getWords() {
