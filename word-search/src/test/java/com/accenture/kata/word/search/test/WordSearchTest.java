@@ -11,12 +11,14 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.TreeSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.accenture.kata.word.search.Coordinates;
+import com.accenture.kata.word.search.Word;
 import com.accenture.kata.word.search.WordSearch;
 import com.accenture.kata.word.search.exception.InvalidGridException;
 import com.accenture.kata.word.search.exception.InvalidWordException;
@@ -35,7 +37,7 @@ public class WordSearchTest {
 
 	@Test
 	public void whenWordSearchLoadsAValidFileAndHasAllWords()
-			throws URISyntaxException, IOException, InvalidWordException, InvalidGridException {
+			throws URISyntaxException, IOException, InvalidWordException, InvalidGridException, WordNotFoundException {
 		WordSearch wordSearch = new WordSearch(getResourcePath("word-search-input-valid-size5.txt"));
 		assertNotNull(wordSearch.getWords());
 		assertEquals(5, wordSearch.getWords().size());
@@ -155,6 +157,29 @@ public class WordSearchTest {
 		searchForWordLocationTest(wordSearchSize8, "MARKET", getCoordinates(new int[][]{{5, 0}, {4, 1}, {3, 2}, {2, 3}, {1, 4}, {0, 5}}));
 		searchForWordLocationTest(wordSearchSize8, "SORT", getCoordinates(new int[][]{{3, 1}, {2, 2}, {1, 3}, {0, 4}}));
 		searchForWordLocationTest(wordSearchSize8, "ORINE", getCoordinates(new int[][]{{2, 4}, {3, 3}, {4, 2}, {5, 1}, {6, 0}}));
+	}
+	
+	@Test
+	public void checkForAllFoundWordsAndTheirLocation() throws WordNotFoundException {
+		List<Word> words = wordSearchSize6.getWords();
+		
+		assertEquals(7, words.size());
+		
+		Word bike = words.get(0);
+		Word flower = words.get(1);
+		Word laptop = words.get(2);
+		Word plant = words.get(3);
+		Word road = words.get(4);
+		Word sun = words.get(5);
+		Word tree = words.get(6);
+
+		assertEquals("BIKE: (3,3),(2,3),(1,3),(0,3)", bike.toString());
+		assertEquals("FLOWER: (0,1),(1,1),(2,1),(3,1),(4,1),(5,1)", flower.toString());
+		assertEquals("LAPTOP: (5,4),(4,4),(3,4),(2,4),(1,4),(0,4)", laptop.toString());
+		assertEquals("PLANT: (0,5),(1,5),(2,5),(3,5),(4,5)", plant.toString());
+		assertEquals("ROAD: (1,0),(2,1),(3,2),(4,3)", road.toString());
+		assertEquals("SUN: (2,2),(1,2),(0,2)", sun.toString());
+		assertEquals("TREE: (2,0),(3,0),(4,0),(5,0)", tree.toString());
 	}
 	
 	/**

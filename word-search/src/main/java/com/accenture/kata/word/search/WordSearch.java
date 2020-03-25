@@ -22,6 +22,7 @@ public class WordSearch {
 	private List<String> diagonalAscending; // moving diagonally ascending from left bottom to right up corner
 	private List<String> diagonalDescending; // moving diagonally descending from left top to right bottom corner
 	private int gridSize;
+	private boolean wordsFound;
 
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyForwards = (a, i, l) -> {
 		Set<Coordinates> coordinates = new TreeSet<>();
@@ -106,9 +107,7 @@ public class WordSearch {
 			throw new InvalidWordException("The words should be at least 2 letters long, only upercase letters and separated by comma.");
 		}
 		
-		String[] listOfWords = firstLine.split(",");
-
-		for (String word : listOfWords) {
+		for (String word : firstLine.split(",")) {
 			words.add(new Word(word));
 		}
 	}
@@ -177,7 +176,13 @@ public class WordSearch {
 		}
 	}
 
-	public List<Word> getWords() {
+	public List<Word> getWords() throws WordNotFoundException {
+		if(!wordsFound) {
+			for(Word word : words) {
+				word.setLocation(findLocationForWord(word.getWord()));
+			}
+			wordsFound = true;
+		}
 		return words;
 	}
 
