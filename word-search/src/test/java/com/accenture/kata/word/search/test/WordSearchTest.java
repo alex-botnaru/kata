@@ -71,9 +71,13 @@ public class WordSearchTest {
 	}
 
 	@Test
-	public void whenWordSearchLoadsAFileWithGridContainingNumbersAndThrowsAnException() {
-		assertThrows(InvalidGridException.class,
-				() -> new WordSearch(getResourcePath("word-search-input-grid-with-numbers.txt")));
+	public void whenWordSearchLoadsAFileWithInvalidGridAndThrowsAnException() {
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-extra-commas.txt")));
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-lower-case-letter.txt")));
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-missing-comma.txt")));
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-numbers.txt")));
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-spaces.txt")));
+		assertThrows(InvalidGridException.class, () -> new WordSearch(getResourcePath("word-search-input-grid-with-special-chars.txt")));
 	}
 
 	@Test

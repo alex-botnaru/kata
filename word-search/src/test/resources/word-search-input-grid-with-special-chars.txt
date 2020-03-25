@@ -1,0 +1,6 @@
+CAR,MOON,PALM,SUN,TEST
+S,A,Q,M,T
+Y,U,L,C,S
+I,A,%,A,E
+P,F,U,R,T
+M,O,O,*,T

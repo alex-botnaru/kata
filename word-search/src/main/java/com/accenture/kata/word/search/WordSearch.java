@@ -123,11 +123,12 @@ public class WordSearch {
 		List<StringBuilder> builderColumns = Stream.generate(StringBuilder::new).limit(lines.size())
 				.collect(Collectors.toList());
 		for (int i = 1; i < lines.size(); i++) {
-			String row = lines.get(i).replaceAll("[ ,]", "");
+			String row = lines.get(i);
 
-			if (containsNumbers(row)) {
-				throw new InvalidGridException("The Grid should not contain numbers.");
+			if (!isGridRowValid(row)) {
+				throw new InvalidGridException("The grid should contain only upper case letters delimited by comma.");
 			}
+			row = row.replace(",", "");
 
 			if (gridSize == -1) {
 				// Assumes first row length (number of columns) should be the grid size, meaning
@@ -183,6 +184,10 @@ public class WordSearch {
 
 	private boolean containsNumbers(String value) {
 		return value.matches(".*\\d.*");
+	}
+	
+	private boolean isGridRowValid(String row) {
+		return row.matches("^[A-Z]{1}(,[A-Z])+");
 	}
 
 	public List<Word> getWords() {
