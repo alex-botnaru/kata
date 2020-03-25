@@ -306,5 +306,9 @@ public class WordSearch {
 	private String reverseString(String value) {
 		return new StringBuilder(value).reverse().toString();
 	}
+	
+	public String print() throws WordNotFoundException {
+		return getWords().stream().map(Word::toString).collect(Collectors.joining(System.getProperty("line.separator")));
+	}
 
 }
