@@ -19,8 +19,8 @@ public class WordSearch {
 	private List<Word> words;
 	private List<String> rows;
 	private List<String> columns;
-	private List<String> diagonalLeftRight;
-	private List<String> diagonalRightLeft;
+	private List<String> diagonalAscending; // moving diagonally ascending from left bottom to right up corner
+	private List<String> diagonalDescending; // moving diagonally descending from left top to right bottom corner
 	private int gridSize;
 
 	private final CoordinatesGenerator coordinatesGeneratorHorizontallyForwards = (a, i, l) -> {
@@ -55,7 +55,7 @@ public class WordSearch {
 		return coordinates;
 	};
 
-	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRightForwards = (x, y, l) -> {
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyAscendingForwards = (x, y, l) -> {
 		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int i = 0; i < l; i++) {
 			coordinates.add(new Coordinates(x + i, y + i, i));
@@ -63,7 +63,7 @@ public class WordSearch {
 		return coordinates;
 	};
 	
-	private final CoordinatesGenerator coordinatesGeneratorDiagonallyLeftRightBackwards = (x, y, l) -> {
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyAscendingBackwards = (x, y, l) -> {
 		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int i = 0; i < l; i++) {
 			coordinates.add(new Coordinates(x - i, y - i, i));
@@ -71,7 +71,7 @@ public class WordSearch {
 		return coordinates;
 	};
 
-	private final CoordinatesGenerator coordinatesGeneratorDiagonallyRightLeftForwards = (x, y, l) -> {
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyDescendingForwards = (x, y, l) -> {
 		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int i = 0; i < l; i++) {
 			coordinates.add(new Coordinates(x + i, y - i, i));
@@ -79,7 +79,7 @@ public class WordSearch {
 		return coordinates;
 	};
 	
-	private final CoordinatesGenerator coordinatesGeneratorDiagonallyRightLeftBackwards = (x, y, l) -> {
+	private final CoordinatesGenerator coordinatesGeneratorDiagonallyDescendingBackwards = (x, y, l) -> {
 		Set<Coordinates> coordinates = new TreeSet<>();
 		for (int i = 0; i < l; i++) {
 			coordinates.add(new Coordinates(x - i, y + i, i));
@@ -91,8 +91,8 @@ public class WordSearch {
 		words = new ArrayList<>();
 		rows = new ArrayList<>();
 		columns = new ArrayList<>();
-		diagonalLeftRight = new ArrayList<>();
-		diagonalRightLeft = new ArrayList<>();
+		diagonalAscending = new ArrayList<>();
+		diagonalDescending = new ArrayList<>();
 		gridSize = -1;
 		List<String> lines = Files.readAllLines(path);
 
@@ -150,24 +150,24 @@ public class WordSearch {
 
 		int dimension = gridSize * 2;
 		for (int j = 0; j < dimension; j++) {
-			StringBuilder diagonalLettersLeftRight = new StringBuilder();
-			StringBuilder diagonalLettersRightLeft = new StringBuilder();
+			StringBuilder diagonalLettersAscending = new StringBuilder();
+			StringBuilder diagonalLettersDescending = new StringBuilder();
 			for (int col = 0; col <= j; col++) {
 				int row = j - col;
 				int middle = gridSize - row;
 				if (middle >= 0 && middle < gridSize && col < gridSize) {
-					diagonalLettersLeftRight.append(rows.get(middle).charAt(col));
+					diagonalLettersAscending.append(rows.get(middle).charAt(col));
 				}
 				if (row >= 0 && row < gridSize && col < gridSize) {
-					diagonalLettersRightLeft.append(rows.get(row).charAt(col));
+					diagonalLettersDescending.append(rows.get(row).charAt(col));
 				}
 			}
 
-			if (diagonalLettersLeftRight.length() > 0) {
-				diagonalLeftRight.add(diagonalLettersLeftRight.toString());
+			if (diagonalLettersAscending.length() > 0) {
+				diagonalAscending.add(diagonalLettersAscending.toString());
 			}
-			if (diagonalLettersRightLeft.length() > 0) {
-				diagonalRightLeft.add(diagonalLettersRightLeft.toString());
+			if (diagonalLettersDescending.length() > 0) {
+				diagonalDescending.add(diagonalLettersDescending.toString());
 			}
 		}
 	}
@@ -184,8 +184,8 @@ public class WordSearch {
 		Set<Coordinates> location = new TreeSet<>();
 		searchWordHorizontally(word, location);
 		searchWordVertically(word, location);
-		searchWrodDiagonallyLeftRight(word, location);
-		searchWrodDiagonallyRightLeft(word, location);
+		searchWrodDiagonallyAscending(word, location);
+		searchWrodDiagonallyDescending(word, location);
 
 		if (location.isEmpty()) {
 			throw new WordNotFoundException(String.format("Word [%s] was not found in the grid", word));
@@ -207,13 +207,13 @@ public class WordSearch {
 		}
 	}
 
-	private void searchWrodDiagonallyLeftRight(String word, Set<Coordinates> location) {
+	private void searchWrodDiagonallyAscending(String word, Set<Coordinates> location) {
 		if (location.isEmpty()) {
 
 			int x = 0;
 			int y = gridSize;
-			for (int i = 0; i < diagonalLeftRight.size(); i++) {
-				String letters = diagonalLeftRight.get(i);
+			for (int i = 0; i < diagonalAscending.size(); i++) {
+				String letters = diagonalAscending.get(i);
 				// Search for word in a list of letters forwards and backwards
 				int forwardIndex = letters.indexOf(word);
 				int backwardIndex = letters.indexOf(reverseString(word));
@@ -225,11 +225,11 @@ public class WordSearch {
 				}
 
 				if (forwardIndex > -1) {
-					location.addAll(coordinatesGeneratorDiagonallyLeftRightForwards.generate(x + forwardIndex,
+					location.addAll(coordinatesGeneratorDiagonallyAscendingForwards.generate(x + forwardIndex,
 							y + forwardIndex, word.length()));
 				} else if(backwardIndex > -1) {
 					backwardIndex += word.length() - 1;
-					location.addAll(coordinatesGeneratorDiagonallyLeftRightBackwards.generate(x + backwardIndex, y + backwardIndex, word.length()));
+					location.addAll(coordinatesGeneratorDiagonallyAscendingBackwards.generate(x + backwardIndex, y + backwardIndex, word.length()));
 				}
 
 				if (!location.isEmpty()) {
@@ -241,12 +241,12 @@ public class WordSearch {
 		}
 	}
 
-	private void searchWrodDiagonallyRightLeft(String word, Set<Coordinates> location) {
+	private void searchWrodDiagonallyDescending(String word, Set<Coordinates> location) {
 		if (location.isEmpty()) {
 			int x = 0;
 			int y = -1;
-			for (int i = 0; i < diagonalRightLeft.size(); i++) {
-				String letters = diagonalRightLeft.get(i);
+			for (int i = 0; i < diagonalDescending.size(); i++) {
+				String letters = diagonalDescending.get(i);
 				// Search for word in a list of letters forwards and backwards
 				int forwardIndex = letters.indexOf(word);
 				int backwardIndex = letters.indexOf(reverseString(word));
@@ -258,11 +258,11 @@ public class WordSearch {
 				}
 				
 				if (forwardIndex > -1) {
-					location.addAll(coordinatesGeneratorDiagonallyRightLeftForwards.generate(x + forwardIndex,
+					location.addAll(coordinatesGeneratorDiagonallyDescendingForwards.generate(x + forwardIndex,
 							y - forwardIndex, word.length()));
 				} else if (backwardIndex > -1) {
 					backwardIndex += word.length() - 1;
-					location.addAll(coordinatesGeneratorDiagonallyRightLeftBackwards.generate(x + backwardIndex, y - backwardIndex, word.length()));
+					location.addAll(coordinatesGeneratorDiagonallyDescendingBackwards.generate(x + backwardIndex, y - backwardIndex, word.length()));
 				}
 
 				if (!location.isEmpty()) {

@@ -129,14 +129,14 @@ public class WordSearchTest {
 	}
 	
 	@Test
-	public void whenSearchForWordsDiagonallyLeftRightForwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+	public void whenSearchForWordsDiagonallyAscendingForwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		searchForWordLocationTest(wordSearchSize8, "INK", getCoordinates(new int[][]{{0, 1}, {1, 2}, {2, 3}}));
 		searchForWordLocationTest(wordSearchSize8, "GROUP", getCoordinates(new int[][]{{0, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6}}));
 		searchForWordLocationTest(wordSearchSize8, "TOE", getCoordinates(new int[][]{{0, 4}, {1, 5}, {2, 6}}));
 	}
 	
 	@Test
-	public void whenSearchForWordsDiagonallyLeftRightBackwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+	public void whenSearchForWordsDiagonallyAscendingBackwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		searchForWordLocationTest(wordSearchSize8, "MIST", getCoordinates(new int[][]{{5, 3}, {4, 2}, {3, 1}, {2, 0}}));
 		searchForWordLocationTest(wordSearchSize8, "THROAT", getCoordinates(new int[][]{{5, 5}, {4, 4}, {3, 3}, {2, 2}, {1, 1}, {0, 0}}));
 		// Next words don't exist in word list, just for testing purpose
@@ -145,14 +145,14 @@ public class WordSearchTest {
 	}
 	
 	@Test
-	public void whenSearchForWordsDiagonallyRightLeftForwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+	public void whenSearchForWordsDiagonallyDescendingForwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		searchForWordLocationTest(wordSearchSize8, "NORTH", getCoordinates(new int[][]{{1, 6}, {2, 5}, {3, 4}, {4, 3}, {5, 2}}));
 		searchForWordLocationTest(wordSearchSize8, "ZOO", getCoordinates(new int[][]{{0, 6}, {1, 5}, {2, 4}}));
 		searchForWordLocationTest(wordSearchSize8, "ROSA", getCoordinates(new int[][]{{1, 3}, {2, 2}, {3, 1}, {4, 0}}));
 	}
 	
 	@Test
-	public void whenSearchForWordsDiagonallyRightLeftBackwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
+	public void whenSearchForWordsDiagonallyDescendingBackwardsAndReturnsTheirLocation() throws IOException, InvalidWordException, InvalidGridException, URISyntaxException, WordNotFoundException {
 		searchForWordLocationTest(wordSearchSize8, "MARKET", getCoordinates(new int[][]{{5, 0}, {4, 1}, {3, 2}, {2, 3}, {1, 4}, {0, 5}}));
 		searchForWordLocationTest(wordSearchSize8, "SORT", getCoordinates(new int[][]{{3, 1}, {2, 2}, {1, 3}, {0, 4}}));
 		searchForWordLocationTest(wordSearchSize8, "ORINE", getCoordinates(new int[][]{{2, 4}, {3, 3}, {4, 2}, {5, 1}, {6, 0}}));
