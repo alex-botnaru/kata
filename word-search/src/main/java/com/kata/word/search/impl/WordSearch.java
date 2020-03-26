@@ -1,4 +1,4 @@
-package com.accenture.kata.word.search;
+package com.kata.word.search.impl;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,9 +10,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.accenture.kata.word.search.exception.InvalidGridException;
-import com.accenture.kata.word.search.exception.InvalidWordException;
-import com.accenture.kata.word.search.exception.WordNotFoundException;
+import com.kata.word.search.exception.InvalidGridException;
+import com.kata.word.search.exception.InvalidWordException;
+import com.kata.word.search.exception.WordNotFoundException;
 
 public class WordSearch {
 

@@ -1,4 +1,4 @@
-package com.accenture.kata.word.search.test;
+package com.kata.word.search.test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,12 +17,12 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.accenture.kata.word.search.Coordinates;
-import com.accenture.kata.word.search.Word;
-import com.accenture.kata.word.search.WordSearch;
-import com.accenture.kata.word.search.exception.InvalidGridException;
-import com.accenture.kata.word.search.exception.InvalidWordException;
-import com.accenture.kata.word.search.exception.WordNotFoundException;
+import com.kata.word.search.exception.InvalidGridException;
+import com.kata.word.search.exception.InvalidWordException;
+import com.kata.word.search.exception.WordNotFoundException;
+import com.kata.word.search.impl.Coordinates;
+import com.kata.word.search.impl.Word;
+import com.kata.word.search.impl.WordSearch;
 
 public class WordSearchTest {
 	

@@ -1,4 +1,4 @@
-package com.accenture.kata.word.search;
+package com.kata.word.search.impl;
 
 import java.util.Set;
 import java.util.stream.Collectors;

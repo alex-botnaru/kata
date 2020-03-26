@@ -1,4 +1,4 @@
-package com.accenture.kata.word.search.exception;
+package com.kata.word.search.exception;
 
 public class WordNotFoundException extends Exception {
 

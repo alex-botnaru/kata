@@ -1,4 +1,4 @@
-package com.accenture.kata.word.search;
+package com.kata.word.search.impl;
 
 public class Coordinates implements Comparable<Coordinates> {
 
